@@ -36,9 +36,11 @@ class GraphBuilder:
         ## Nodes
         self.graph.add_node("title_creation",self.blog_node_object.title_creation)
         self.graph.add_node("content_generation",self.blog_node_object.content_generation)
+        self.graph.add_node("route",self.blog_node_object.route)
         self.graph.add_node("hindi_translation",lambda state: self.blog_node_object.translation({**state, "current_language":"hindi"}))
         self.graph.add_node("gujarati_translation",lambda state: self.blog_node_object.translation({**state, "current_language":"gujarati"}))
-        self.graph.add_node("route",self.blog_node_object.route)
+        self.graph.add_node("french_translation",lambda state: self.blog_node_object.translation({**state, "current_language":"french"}))
+        self.graph.add_node("spanish_translation",lambda state: self.blog_node_object.translation({**state, "current_language":"spanish"}))        
 
         # Edges
         self.graph.add_edge(START,"title_creation")
@@ -51,13 +53,17 @@ class GraphBuilder:
             self.blog_node_object.route_decision,
             {
                 "hindi":"hindi_translation",
-                "gujarati":"gujarati_translation"
+                "gujarati":"gujarati_translation",
+                "french":"french_translation",
+                "spanish":"spanish_translation"
             }
         )
 
         # Edges
         self.graph.add_edge("hindi_translation",END)
         self.graph.add_edge("gujarati_translation",END)
+        self.graph.add_edge("french_translation",END)
+        self.graph.add_edge("spanish_translation",END)
 
         return self.graph
 

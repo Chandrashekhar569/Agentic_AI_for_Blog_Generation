@@ -100,5 +100,9 @@ class BlogNode:
             return  "hindi"
         elif state["current_language"]=="gujarati":
             return "gujarati"
+        elif state["current_language"]=="french":
+            return "french"
+        elif state["current_language"]=="spanish":
+            return "spanish"
         else:
             return  state["current_language"]
