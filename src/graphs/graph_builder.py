@@ -1,3 +1,34 @@
+"""
+=============================================
+            Graph Builder File
+=============================================
+* This file defines the `GraphBuilder` class, responsible for constructing LangGraph workflows
+  for blog generation using dynamic language-specific nodes and transitions.
+
+* Key Responsibilities:
+  - Initializes a graph with blog-specific state (`BlogState`)
+  - Adds nodes for title creation, content generation, and multilingual translation
+  - Builds two types of graphs:
+    • Topic-based blog generation
+    • Language-aware blog translation flows via conditional routing
+
+## Class: GraphBuilder
+* Manages graph construction based on chosen use-case ("topic" or "language")
+* Leverages BlogNode functions for modular node logic
+
+## Function: buld_topic_graph()
+* Constructs basic graph with title and content generation nodes
+
+## Function: build_language_graph()
+* Builds graph with routing node and conditional edges for translating blog content
+  into Hindi, Gujarati, French, or Spanish
+
+## Function: setup_graph(usecase)
+* Compiles and returns the graph based on selected usecase
+
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+"""
+
 from langgraph.graph import StateGraph,START,END
 from src.llms.groq_llm import GroqLLM
 from src.states.blog_state import BlogState

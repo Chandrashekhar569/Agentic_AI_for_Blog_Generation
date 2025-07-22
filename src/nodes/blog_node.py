@@ -1,3 +1,36 @@
+"""
+=============================================
+             Blog Node File
+=============================================
+* This file defines the `BlogNode` class, which provides modular node functions
+  for LangGraph workflows that support multilingual blog generation.
+
+* Key Responsibilities:
+  - Handles title generation, blog content creation, and translation logic
+  - Integrates with LangChain-compatible LLMs to produce structured markdown output
+  - Supports dynamic routing and multilingual translation pipelines
+
+## Class: BlogNode
+* Encapsulates node-level operations for graph-based blog workflows
+
+## Function: title_creation()
+* Generates an SEO-friendly and stylistically varied blog title based on topic input
+
+## Function: content_generation()
+* Produces a well-structured blog post using markdown with headings, bullet points, and examples
+
+## Function: translation()
+* Converts blog content into the specified language while preserving format and tone
+
+## Function: route()
+* Extracts the current language from the blog state for routing decisions
+
+## Function: route_decision()
+* Determines the next node based on `current_language` and returns language-specific routing key
+_____________________________________________
+"""
+
+
 from src.states.blog_state import BlogState
 from langchain_core.messages import SystemMessage,HumanMessage
 from src.states.blog_state import Blog

@@ -31,6 +31,10 @@ src/
 │   └── graph_builder.py       # Builds LangGraph workflows based on use case
 ├── llms/
 │   └── groq_llm.py            # Groq LLM wrapper for LangChain
+├── nodes/
+│   └── blog_node.py           # Node logic for title, content, and multilingual blog workflows.
+├── states/
+│   └── blog_state.py.py       # Defines schema and state types for topic-based blog generation.
 app.py                         # FastAPI server and API routes
 requirements.txt               # Project dependencies
 .env                           # Environment variables (not included)
@@ -42,15 +46,14 @@ requirements.txt               # Project dependencies
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/langgraph-blog-api.git
-cd langgraph-blog-api
+git clone https://github.com/Chandrashekhar569/Agentic_AI_for_Blog_Generation.git
 
 # Create a virtual environment
-python -m venv venv
-source venv/bin/activate  # or venv\Scripts\activate on Windows
+uv venv
+.venv\Scripts\activate  # or venv\Scripts\activate on Windows
 
 # Install dependencies
-pip install -r requirements.txt
+uv add -r requirements.txt
 ```
 
 ---
@@ -107,7 +110,7 @@ API will be accessible at: `http://localhost:8000`
 ```bash
 curl -X POST http://localhost:8000/blogs \
   -H "Content-Type: application/json" \
-  -d '{"topic": "AI in Healthcare", "language": "Spanish"}'
+  -d '{"topic": "AI in Healthcare", "language": "spanish"}'
 ```
 
 ---
@@ -152,4 +155,19 @@ MIT License. See [LICENSE](LICENSE) for more info.
 
 ---
 
-> Built with 🧠 and ☕ by Chandrashekhar Chaudhari
+## 👤 About Me
+
+Hey there! I’m **Chandrashekhar Chaudhari**—a former Data Analyst now actively transitioning into AI/ML engineering. This project reflects my passion for building intelligent workflows with LangGraph and LLMs, exploring how agentic architectures can produce multilingual blog content at scale.
+
+I specialize in:
+- 🧠 Generative AI workflows using LangChain, LangGraph, and Hugging Face
+- 🛠️ Backend engineering with FastAPI and cloud platforms like AWS & Azure
+- 📈 Data analysis and visualization using Python, SQL, and Power BI
+- 🤖 Deploying modular, agent-driven pipelines with technologies like Streamlit, Docker, and MLOps tools
+
+I believe in open-source collaboration and solving real-world problems with structured, scalable AI systems.
+
+Want to connect or check out more of my work? [Visit my GitHub](https://github.com/Chandrashekhar569)
+
+---
+
