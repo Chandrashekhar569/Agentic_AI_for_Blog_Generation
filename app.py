@@ -35,8 +35,6 @@ async def create_blogs(request:Request):
         graph=graph_builder.setup_graph(usecase="topic")
         state=graph.invoke({"topic":topic})
     
-
-
     return {"data":state}
 
 

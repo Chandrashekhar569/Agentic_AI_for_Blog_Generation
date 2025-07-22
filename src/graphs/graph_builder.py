@@ -17,7 +17,6 @@ class GraphBuilder:
 
         self.blog_node_object=BlogNode(self.llm)
 
-
         ## Nodes
         self.graph.add_node("title_creation",self.blog_node_object.title_creation)
         self.graph.add_node("content_generation",self.blog_node_object.content_generation)

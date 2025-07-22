@@ -85,6 +85,8 @@ class BlogNode:
         ]
 
         translation_content=self.llm.with_structured_output(Blog).invoke(message)
+
+        return {"blog": {"content": translation_content.content}}
     
     def route(self,state:BlogState):
         return {"current_language": state['current_language']}
