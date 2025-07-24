@@ -146,14 +146,6 @@ MIT License. See [LICENSE](LICENSE) for more info.
 
 ---
 
-## 💡 Future Improvements
-
-- ✍️ Add blog tone and length as options  
-- 🌍 Enhance multilingual output with translation LLMs  
-- 📄 Markdown blog output support  
-- 🧪 Add test coverage with Pytest  
-
----
 
 ## 👤 About Me
 

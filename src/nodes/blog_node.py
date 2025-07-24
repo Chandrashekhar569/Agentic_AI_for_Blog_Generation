@@ -1,74 +1,62 @@
-"""
-=============================================
-             Blog Node File
-=============================================
-* This file defines the `BlogNode` class, which provides modular node functions
-  for LangGraph workflows that support multilingual blog generation.
-
-* Key Responsibilities:
-  - Handles title generation, blog content creation, and translation logic
-  - Integrates with LangChain-compatible LLMs to produce structured markdown output
-  - Supports dynamic routing and multilingual translation pipelines
-
-## Class: BlogNode
-* Encapsulates node-level operations for graph-based blog workflows
-
-## Function: title_creation()
-* Generates an SEO-friendly and stylistically varied blog title based on topic input
-
-## Function: content_generation()
-* Produces a well-structured blog post using markdown with headings, bullet points, and examples
-
-## Function: translation()
-* Converts blog content into the specified language while preserving format and tone
-
-## Function: route()
-* Extracts the current language from the blog state for routing decisions
-
-## Function: route_decision()
-* Determines the next node based on `current_language` and returns language-specific routing key
-_____________________________________________
-"""
-
-
 from src.states.blog_state import BlogState
-from langchain_core.messages import SystemMessage,HumanMessage
+from langchain_core.messages import SystemMessage, HumanMessage
 from src.states.blog_state import Blog
 
 
 class BlogNode:
     """
-    The class to represent he blog node
+    A class that defines the core nodes for LangGraph blog generation flow.
+
+    This class contains logic for generating a title, full content, language translation,
+    and routing decisions for translation workflows.
+
+    Attributes:
+        llm: The language model used for content generation and translation.
     """
-    def __init__(self,llm):
+
+    def __init__(self, llm):
+        """
+        Initialize BlogNode with a language model.
+
+        Args:
+            llm: A language model instance with `.invoke()` method.
+        """
         self.llm = llm
 
-
-
-    def title_creation(self,state:BlogState):
+    def title_creation(self, state: BlogState):
         """
-        create the title for the blog
-        """
+        Generate a title for the blog based on the input topic.
 
+        Args:
+            state (BlogState): The current blog state containing the topic.
+
+        Returns:
+            dict: A dictionary with the generated blog title under the "blog" key.
+        """
         if "topic" in state and state["topic"]:
-            prompt="""
-                    You're a title creation agent. Given a topic, generate 1 impactful, 
-                    audience-targeted title suitable for digital platforms (blogs, videos, presentations). 
-                    The title should be clear, concise, and SEO-friendly. Rotate between styles—listicle, 
-                    question-based, innovation-driven, or emotionally resonant—depending on topic context. 
-                    Format the output using markdown. Topic: {topic}
-                """
-            
-            system_message=prompt.format(topic=state["topic"])
-            response=self.llm.invoke(system_message)
-            return {"blog":{"title":response.content}}
-        
+            prompt = """
+                You're a title creation agent. Given a topic, generate 1 impactful, 
+                audience-targeted title suitable for digital platforms (blogs, videos, presentations). 
+                The title should be clear, concise, and SEO-friendly. Rotate between styles—listicle, 
+                question-based, innovation-driven, or emotionally resonant—depending on topic context. 
+                Format the output using markdown. Topic: {topic}
+            """
+
+            system_message = prompt.format(topic=state["topic"])
+            response = self.llm.invoke(system_message)
+
+            return {"blog": {"title": response.content}}
 
     def content_generation(self, state: BlogState):
         """
-        Generates detailed blog content using a language model, based on the provided topic.
-        """
+        Generate full blog content based on the input topic.
 
+        Args:
+            state (BlogState): The current blog state with topic and title.
+
+        Returns:
+            dict: A dictionary with the generated blog title and content.
+        """
         if "topic" in state and state["topic"]:
             system_prompt = """
             You are an expert blog writer specializing in engaging, well-researched digital content.
@@ -98,10 +86,17 @@ class BlogNode:
                     "content": response.content.strip()
                 }
             }
-        
-    def translation(self,state:BlogState):
-        """Translate the content to the specified language """
-        
+
+    def translation(self, state: BlogState):
+        """
+        Translate the blog content to the language specified in the state.
+
+        Args:
+            state (BlogState): Blog state with `blog.content` and `current_language`.
+
+        Returns:
+            dict: A dictionary containing the translated blog content.
+        """
         translation_prompt = """
         Please translate the content below into {current_language}, ensuring the following:
 
@@ -112,30 +107,51 @@ class BlogNode:
         ORIGINAL CONTENT:
         {blog_content}
         """
+
         blog_content = state["blog"]["content"]
-        message=[
-            HumanMessage(translation_prompt.format(current_language=state["current_language"],blog_content=blog_content))
+        message = [
+            HumanMessage(
+                translation_prompt.format(
+                    current_language=state["current_language"],
+                    blog_content=blog_content
+                )
+            )
         ]
 
-        translation_content=self.llm.with_structured_output(Blog).invoke(message)
+        # Structured output ensures the translated result adheres to Blog schema
+        translation_content = self.llm.with_structured_output(Blog).invoke(message)
 
         return {"blog": {"content": translation_content.content}}
-    
-    def route(self,state:BlogState):
-        return {"current_language": state['current_language']}
-    
-    def route_decision(self,state:BlogState):
-        """
-        Route the content to the respective translation function.
-        """
 
-        if state['current_language']=="hindi":
-            return  "hindi"
-        elif state["current_language"]=="gujarati":
+    def route(self, state: BlogState):
+        """
+        Pass through current_language for routing decisions.
+
+        Args:
+            state (BlogState): The current blog state.
+
+        Returns:
+            dict: A dictionary with the current_language value.
+        """
+        return {"current_language": state['current_language']}
+
+    def route_decision(self, state: BlogState):
+        """
+        Determine which translation path to follow based on current_language.
+
+        Args:
+            state (BlogState): The current blog state.
+
+        Returns:
+            str: The key representing the chosen translation node.
+        """
+        if state['current_language'] == "hindi":
+            return "hindi"
+        elif state["current_language"] == "gujarati":
             return "gujarati"
-        elif state["current_language"]=="french":
+        elif state["current_language"] == "french":
             return "french"
-        elif state["current_language"]=="spanish":
+        elif state["current_language"] == "spanish":
             return "spanish"
         else:
-            return  state["current_language"]
+            return state["current_language"]
